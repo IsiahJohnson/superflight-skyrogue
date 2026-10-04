@@ -18,6 +18,12 @@ var spread_angle: float = 0.0
 var glow: float = 0.0
 var pulse_time: float = 0.0
 
+func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+func _exit_tree():
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
 func _process(delta):
 	if weapons == null:
 		return
@@ -51,26 +57,18 @@ func _process(delta):
 func _draw():
 	if weapons == null:
 		return
-	var aim = weapons.get_aim_direction()
-	if aim == Vector2.ZERO:
-		return
-	var local_aim = get_global_transform().basis_xform_inv(aim).normalized()
-	var length = weapons.get_effective_range()
-	var count = weapons.get_shot_count()
-
-	var line_color = color
-	var line_width = width
+	# Reticle at the mouse position (aim point), in local space
+	var center = to_local(get_global_mouse_position())
+	var reticle_color = color
+	var r = 14.0 + width
 	if weapons.rapid_level > 0:
-		line_width *= 1.0 + 0.2 * sin(pulse_time * TAU * 4.0)
-		line_color.a *= 0.85 + 0.15 * sin(pulse_time * TAU * 4.0)
-
-	for index in range(count):
-		var angle = (index - (count - 1) / 2.0) * spread_angle
-		var end = local_aim.rotated(angle) * length
-		if glow > 0.01:
-			var glow_color = line_color
-			glow_color.a *= 0.35 * glow
-			draw_line(Vector2.ZERO, end, glow_color, line_width * 3.0)
-		draw_line(Vector2.ZERO, end, line_color, line_width)
-		if weapons.laser_level > 0:
-			draw_line(Vector2.ZERO, end, Color(1, 1, 1, 0.7 * line_color.a / 0.55), maxf(1.0, line_width * 0.3))
+		r += 2.0 * sin(pulse_time * TAU * 4.0)
+	if glow > 0.01:
+		var glow_color = reticle_color
+		glow_color.a *= 0.35 * glow
+		draw_arc(center, r, 0.0, TAU, 32, glow_color, width * 3.0)
+	draw_arc(center, r, 0.0, TAU, 32, reticle_color, width)
+	for dir in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
+		var rotated = get_global_transform().basis_xform_inv(dir).normalized()
+		draw_line(center + rotated * (r - 5.0), center + rotated * (r + 6.0), reticle_color, width)
+	draw_circle(center, 1.5, reticle_color)
