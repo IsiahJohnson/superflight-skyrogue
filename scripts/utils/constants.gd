@@ -5,7 +5,7 @@ extends Node
 ## Player Movement
 const PLAYER_MAX_SPEED = 500.0
 const PLAYER_ACCELERATION = 800.0
-const PLAYER_DRAG = 0.95  # Momentum multiplier (lower = more drag)
+const PLAYER_DRAG = 0.12  # Air resistance per second
 const PLAYER_DIVE_MULTIPLIER = 1.5  # Speed boost when diving
 const PLAYER_TURN_SPEED = 5.0  # Rotation speed
 

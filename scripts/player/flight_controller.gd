@@ -7,7 +7,7 @@ signal died
 
 @export var max_speed: float = 500.0
 @export var acceleration: float = 800.0
-@export var drag: float = 0.95  # Friction/air resistance
+@export var drag: float = 0.12  # Air resistance per second
 @export var dive_multiplier: float = 1.5
 @export var turn_speed: float = 5.0
 
@@ -56,40 +56,35 @@ func _handle_input():
 	is_diving = Input.is_action_pressed("dive")
 
 func _update_flight_physics(delta):
-	# Determine target speed based on dive state
 	var target_speed = max_speed
 	if is_diving:
 		target_speed *= dive_multiplier
-	
-	# Apply acceleration towards target speed if moving
-	if input_vector.length() > 0:
-		current_speed = move_toward(current_speed, target_speed, acceleration * delta)
-	else:
-		# Gradual deceleration when no input
-		current_speed = move_toward(current_speed, 0, acceleration * delta * 0.5)
-	
-	# Apply drag to current speed (realistic friction)
-	current_speed *= drag
+
+	velocity += input_vector * acceleration * delta
+	if is_diving and velocity.length_squared() > 0.0:
+		velocity += velocity.normalized() * acceleration * (dive_multiplier - 1.0) * delta
+
+	velocity *= exp(-drag * delta)
+	if velocity.length() > target_speed:
+		velocity = velocity.normalized() * target_speed
+	current_speed = velocity.length()
 
 func _update_position(delta):
-	if input_vector.length() > 0:
-		# Move in direction player is pointing
-		var direction = input_vector
-		
-		# Rotate player towards movement direction
-		var target_rotation = direction.angle()
+	if velocity.length_squared() > 0.0:
+		var target_rotation = velocity.angle()
 		rotation = lerp_angle(rotation, target_rotation, turn_speed * delta)
-		
-		# Move forward based on current speed
-		position += direction * current_speed * delta
-	
-	# Update velocity for CharacterBody2D (for collision detection)
-	velocity = (input_vector * current_speed).normalized() * current_speed
+
+	move_and_slide()
 
 func _clamp_to_world():
 	"""Keep player within world bounds"""
-	position.x = clamp(position.x, 0, Constants.WORLD_WIDTH)
-	position.y = clamp(position.y, 0, Constants.WORLD_HEIGHT)
+	if position.x < 0.0 or position.x > Constants.WORLD_WIDTH:
+		velocity.x = 0.0
+	if position.y < 0.0 or position.y > Constants.WORLD_HEIGHT:
+		velocity.y = 0.0
+	position.x = clampf(position.x, 0.0, Constants.WORLD_WIDTH)
+	position.y = clampf(position.y, 0.0, Constants.WORLD_HEIGHT)
+	current_speed = velocity.length()
 
 func take_damage(amount: float):
 	"""Handle damage to player"""
@@ -110,13 +105,14 @@ func _on_death():
 
 func reset_flight():
 	"""Reset flight state (useful for new runs)"""
+	velocity = Vector2.ZERO
 	current_speed = 0.0
 	is_diving = false
 	health = max_health
 
 func get_speed_ratio() -> float:
 	"""Return speed as ratio of max speed (0.0 to 1.0)"""
-	return current_speed / max_speed
+	return clampf(current_speed / max_speed, 0.0, 1.0)
 
 func _draw():
 	draw_colored_polygon(
