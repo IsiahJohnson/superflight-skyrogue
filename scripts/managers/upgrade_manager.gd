@@ -6,7 +6,9 @@ const UPGRADE_DEFINITIONS = {
 	"reinforced_hull": {"name": "Reinforced Hull", "description": "+20 maximum health"},
 	"light_frame": {"name": "Light Frame", "description": "+10% flight speed"},
 	"rapid_fire": {"name": "Rapid Fire", "description": "20% faster firing"},
-	"heavy_rounds": {"name": "Heavy Rounds", "description": "+5 weapon damage"}
+	"heavy_rounds": {"name": "Heavy Rounds", "description": "+5 weapon damage"},
+	"spread_shot": {"name": "Spread Shot", "description": "+2 projectiles in a fan"},
+	"laser": {"name": "Laser", "description": "Continuous beam with longer range"}
 }
 
 var upgrade_levels: Dictionary = {}
@@ -61,10 +63,20 @@ func _apply_effect(upgrade_id: String, player: Node):
 			var weapons = player.get_node_or_null("Weapons")
 			if weapons:
 				weapons.fire_rate = maxf(0.05, weapons.fire_rate * 0.8)
+				weapons.rapid_level += 1
 		"heavy_rounds":
 			var weapons = player.get_node_or_null("Weapons")
 			if weapons:
 				weapons.damage += 5
+				weapons.heavy_level += 1
+		"spread_shot":
+			var weapons = player.get_node_or_null("Weapons")
+			if weapons:
+				weapons.spread_level += 1
+		"laser":
+			var weapons = player.get_node_or_null("Weapons")
+			if weapons:
+				weapons.laser_level += 1
 
 func _save_game_data():
 	var config = ConfigFile.new()
