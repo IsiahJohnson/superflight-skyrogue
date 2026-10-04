@@ -3,17 +3,17 @@ extends Node2D
 # Draws the aim line(s) for the player's shots. Style follows the active weapon
 # upgrades and eases toward its target values for smooth transitions.
 
-const BASE_COLOR = Color(1.0, 1.0, 1.0, 0.35)
-const SPREAD_COLOR = Color(0.3, 0.9, 1.0, 0.4)
-const RAPID_COLOR = Color(1.0, 0.85, 0.2, 0.45)
-const HEAVY_COLOR = Color(1.0, 0.45, 0.2, 0.45)
-const LASER_COLOR = Color(1.0, 0.2, 0.3, 0.55)
+const BASE_COLOR = Color(1.0, 1.0, 1.0, 0.8)
+const SPREAD_COLOR = Color(0.3, 0.9, 1.0, 0.8)
+const RAPID_COLOR = Color(1.0, 0.85, 0.2, 0.85)
+const HEAVY_COLOR = Color(1.0, 0.45, 0.2, 0.85)
+const LASER_COLOR = Color(1.0, 0.2, 0.3, 0.9)
 const BLEND_SPEED = 8.0
 
 @onready var weapons = get_parent().get_node_or_null("Weapons")
 
 var color: Color = BASE_COLOR
-var width: float = 1.5
+var width: float = 2.5
 var spread_angle: float = 0.0
 var glow: float = 0.0
 var pulse_time: float = 0.0
@@ -25,7 +25,7 @@ func _process(delta):
 	var t = clampf(delta * BLEND_SPEED, 0.0, 1.0)
 
 	var target_color = BASE_COLOR
-	var target_width = 1.5
+	var target_width = 2.5
 	var target_glow = 0.0
 	if weapons.spread_level > 0:
 		target_color = SPREAD_COLOR
