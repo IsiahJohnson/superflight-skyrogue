@@ -92,7 +92,7 @@ superflight-skyrogue/
 
 ### `flight_controller.gd`
 Handles inertial player flight:
-- Directional input accelerates and steers the player while preserving existing momentum
+- The player continuously accelerates forward; directional input steers and adds acceleration while preserving momentum
 - Releasing directional input lets the player glide, with gradual air resistance
 - Holding Space accelerates along the current flight path and raises the speed limit
 - Character-body movement handles collision response
