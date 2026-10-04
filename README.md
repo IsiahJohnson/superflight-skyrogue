@@ -91,11 +91,11 @@ superflight-skyrogue/
 ## Key Scripts
 
 ### `flight_controller.gd`
-Handles player flight physics:
-- Acceleration/deceleration
-- Momentum preservation
-- Dive mechanics
-- Terrain collision
+Handles inertial player flight:
+- Directional input accelerates and steers the player while preserving existing momentum
+- Releasing directional input lets the player glide, with gradual air resistance
+- Holding Space accelerates along the current flight path and raises the speed limit
+- Character-body movement handles collision response
 
 ### `run_manager.gd`
 Manages the run loop:
