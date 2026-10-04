@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/managers/run_manager.gd" id="2_run_manager"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/managers/upgrade_manager.gd" id="4_upgrade_manager"]
 [ext_resource type="Script" path="res://scripts/player/flight_controller.gd" id="5_flight_controller"]
 [ext_resource type="Script" path="res://scripts/player/weapons.gd" id="6_weapons"]
+[ext_resource type="Script" path="res://scripts/player/projectile_line.gd" id="7_projectile_line"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 12.0
@@ -31,6 +32,9 @@ shape = SubResource("CircleShape2D_player")
 
 [node name="Weapons" type="Node" parent="Player"]
 script = ExtResource("6_weapons")
+
+[node name="ProjectileLine" type="Node2D" parent="Player"]
+script = ExtResource("7_projectile_line")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
