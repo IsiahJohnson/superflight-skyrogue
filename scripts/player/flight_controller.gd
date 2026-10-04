@@ -3,6 +3,8 @@ extends CharacterBody2D
 ## Flight Controller Script
 ## Handles all player movement, momentum, and flight physics
 
+signal died
+
 @export var max_speed: float = 500.0
 @export var acceleration: float = 800.0
 @export var drag: float = 0.95  # Friction/air resistance
@@ -28,6 +30,7 @@ func _ready():
 	# Set up physics
 	if has_node("CollisionShape2D"):
 		pass  # Collision shape already set up in scene
+	queue_redraw()
 
 func _physics_process(delta):
 	_handle_input()
@@ -90,6 +93,9 @@ func _clamp_to_world():
 
 func take_damage(amount: float):
 	"""Handle damage to player"""
+	if amount <= 0.0 or health <= 0.0:
+		return
+
 	health -= amount
 	health = max(0, health)
 	
@@ -99,8 +105,8 @@ func take_damage(amount: float):
 func _on_death():
 	"""Handle player death"""
 	print("Player died!")
-	# Emit signal or notify run manager
-	queue_free()
+	set_physics_process(false)
+	died.emit()
 
 func reset_flight():
 	"""Reset flight state (useful for new runs)"""
@@ -111,3 +117,9 @@ func reset_flight():
 func get_speed_ratio() -> float:
 	"""Return speed as ratio of max speed (0.0 to 1.0)"""
 	return current_speed / max_speed
+
+func _draw():
+	draw_colored_polygon(
+		PackedVector2Array([Vector2(16, 0), Vector2(-12, -10), Vector2(-7, 0), Vector2(-12, 10)]),
+		Color(0.25, 0.8, 1.0)
+	)

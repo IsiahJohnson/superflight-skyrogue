@@ -1,0 +1,44 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/managers/run_manager.gd" id="2_run_manager"]
+[ext_resource type="Script" path="res://scripts/managers/world_manager.gd" id="3_world_manager"]
+[ext_resource type="Script" path="res://scripts/managers/upgrade_manager.gd" id="4_upgrade_manager"]
+[ext_resource type="Script" path="res://scripts/player/flight_controller.gd" id="5_flight_controller"]
+[ext_resource type="Script" path="res://scripts/player/weapons.gd" id="6_weapons"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_player"]
+radius = 12.0
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="WorldManager" type="Node2D" parent="."]
+script = ExtResource("3_world_manager")
+
+[node name="RunManager" type="Node" parent="."]
+script = ExtResource("2_run_manager")
+
+[node name="UpgradeManager" type="Node" parent="."]
+script = ExtResource("4_upgrade_manager")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("5_flight_controller")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CircleShape2D_player")
+
+[node name="Weapons" type="Node" parent="Player"]
+script = ExtResource("6_weapons")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 1240.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "WASD / Arrows: fly   Space: dive   Mouse: aim   Left click: fire"
