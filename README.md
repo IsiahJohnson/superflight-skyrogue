@@ -5,7 +5,7 @@ A flying roguelike hybrid combining **Superflight's** physics-based gliding mech
 ## Project Overview
 
 ### Gameplay Concept
-- **Flight Mechanics:** Smooth, physics-based gliding with momentum management
+- **Flight Mechanics:** Three-dimensional, physics-based gliding with momentum management
 - **Combat:** Procedurally generated enemies and terrain encounters
 - **Progression:** Permadeath roguelike loop with between-run upgrades
 - **Risk/Reward:** Terrain-hugging flight for speed boosts, but crashes cause damage
@@ -21,8 +21,10 @@ A flying roguelike hybrid combining **Superflight's** physics-based gliding mech
 ```
 superflight-skyrogue/
 ├── scenes/
-│   ├── main.tscn              # Playable game scene
-│   └── main.gd                # Game loop and HUD
+│   ├── flight_demo.tscn       # 3D gliding flight scene (startup scene)
+│   ├── flight_demo.gd         # Flight environment and HUD
+│   ├── main.tscn              # Earlier 2D combat prototype
+│   └── main.gd                # 2D prototype game loop and HUD
 ├── scripts/
 │   ├── enemies/
 │   │   └── enemy.gd           # Enemy chase AI, health, and damage
@@ -90,12 +92,14 @@ superflight-skyrogue/
 
 ## Key Scripts
 
-### `flight_controller.gd`
-Handles inertial player flight:
-- The player continuously accelerates forward; directional input steers and adds acceleration while preserving momentum
-- Releasing directional input lets the player glide, with gradual air resistance
-- Holding Space accelerates along the current flight path and raises the speed limit
-- Character-body movement handles collision response
+### `flight_controller_3d.gd`
+Handles the playable three-dimensional glider flight:
+- A / D bank and turn; W / S pitch up and down
+- Releasing the controls preserves momentum while lift and air resistance shape the glide
+- Holding Space boosts speed for a dive
+- Terrain collisions end the flight; press R to restart
+
+The previous top-down combat prototype remains available in `scenes/main.tscn`.
 
 ### `run_manager.gd`
 Manages the run loop:
@@ -113,7 +117,7 @@ Procedural generation:
 ### `upgrade_manager.gd`
 Offers up to three upgrades after each run and saves selected upgrade levels in `user://progress.cfg`.
 
-The main scene includes a lightweight player, enemy spawner, HUD, and keyboard-selectable upgrade loop. Aim with the mouse and hold the left mouse button to fire.
+`scenes/main.tscn` retains the earlier top-down combat prototype, including its enemy spawner, HUD, and upgrade loop. Aim with the mouse and hold the left mouse button to fire.
 
 ## Performance Tips for Low-End Hardware
 
@@ -127,13 +131,10 @@ The main scene includes a lightweight player, enemy spawner, HUD, and keyboard-s
 
 | Action | Input |
 |--------|-------|
-| Move Up | W / ↑ |
-| Move Down | S / ↓ |
-| Move Left | A / ← |
-| Move Right | D / → |
+| Turn | A / D |
+| Pitch | W / S |
 | Dive/Boost | SPACE |
-| Shoot | Left Mouse Button |
-| Pause | ESC |
+| Restart after crash | R |
 
 ## License
 
