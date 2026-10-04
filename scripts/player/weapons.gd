@@ -42,11 +42,9 @@ func _fire():
 		_fire_ray(direction.rotated(angle))
 
 func _fire_ray(direction: Vector2):
-	var query = PhysicsRayQueryParameters2D.create(
-		player.global_position,
-		player.global_position + direction * get_effective_range()
-	)
-	query.exclude = [player.get_rid()]
-	var hit = player.get_world_2d().direct_space_state.intersect_ray(query)
-	if hit and hit.collider.is_in_group("enemies") and hit.collider.has_method("take_damage"):
-		hit.collider.take_damage(damage)
+	var fireball = preload("res://scripts/player/fireball.gd").new()
+	fireball.direction = direction
+	fireball.damage = damage
+	fireball.max_distance = get_effective_range()
+	player.get_parent().add_child(fireball)
+	fireball.global_position = player.global_position
