@@ -60,6 +60,7 @@ func _update_flight_physics(delta):
 	if is_diving:
 		target_speed *= dive_multiplier
 
+	velocity += Vector2.RIGHT.rotated(rotation) * acceleration * delta
 	velocity += input_vector * acceleration * delta
 	if is_diving and velocity.length_squared() > 0.0:
 		velocity += velocity.normalized() * acceleration * (dive_multiplier - 1.0) * delta
