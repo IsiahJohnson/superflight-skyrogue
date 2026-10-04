@@ -21,37 +21,20 @@ A flying roguelike hybrid combining **Superflight's** physics-based gliding mech
 ```
 superflight-skyrogue/
 ├── scenes/
-│   ├── main.tscn              # Main game scene
-│   ├── player/
-│   │   ├── player.tscn        # Player ship/character
-│   │   └── player.gd          # Player flight controller
-│   ├── enemies/
-│   │   ├── enemy_base.tscn    # Base enemy template
-│   │   └── enemy.gd           # Enemy behavior
-│   ├── world/
-│   │   ├── terrain.tscn       # Terrain tiles/chunks
-│   │   └── terrain.gd         # Terrain generation
-│   └── ui/
-│       ├── hud.tscn           # Heads-up display
-│       ├── pause_menu.tscn    # Pause menu
-│       └── upgrade_screen.tscn # Post-run upgrades
+│   ├── main.tscn              # Playable game scene
+│   └── main.gd                # Game loop and HUD
 ├── scripts/
+│   ├── enemies/
+│   │   └── enemy.gd           # Enemy chase AI, health, and damage
 │   ├── managers/
 │   │   ├── run_manager.gd     # Run progression & permadeath
 │   │   ├── world_manager.gd   # Procedural generation
-│   │   └── upgrade_manager.gd # Upgrade system
+│   │   └── upgrade_manager.gd # Upgrade selection and persistence
 │   ├── player/
 │   │   ├── flight_controller.gd  # Flight physics
 │   │   └── weapons.gd            # Weapon/combat system
 │   └── utils/
 │       ├── constants.gd        # Game constants
-│       └── helpers.gd          # Utility functions
-├── assets/
-│   ├── sprites/                # 2D graphics (player, enemies, terrain)
-│   ├── audio/                  # Music & SFX
-│   │   ├── music/
-│   │   └── sfx/
-│   └── fonts/                  # Custom fonts
 ├── project.godot               # Godot project config
 └── README.md                   # This file
 ```
@@ -76,28 +59,28 @@ superflight-skyrogue/
 ### Development Checklist
 
 #### Phase 1: Flight Mechanics (MVP)
-- [ ] Basic player sprite/shape
-- [ ] Flight controller (up/down/left/right movement)
-- [ ] Speed system (momentum-based)
-- [ ] Dive mechanic (speed boost)
+- [x] Basic player sprite/shape
+- [x] Flight controller (up/down/left/right movement)
+- [x] Speed system (momentum-based)
+- [x] Dive mechanic (speed boost)
 - [ ] Terrain collision detection
 
 #### Phase 2: Combat
-- [ ] Simple enemy spawning
-- [ ] Enemy AI (chase/pattern)
-- [ ] Bullet/weapon system
-- [ ] Hit detection & damage
+- [x] Simple enemy spawning
+- [x] Enemy AI (chase/pattern)
+- [x] Weapon system
+- [x] Hit detection & damage
 
 #### Phase 3: Procedural Generation
-- [ ] Terrain chunk system
+- [x] Terrain chunk system
 - [ ] Procedural spawning algorithms
 - [ ] Wave-based enemy progression
 
 #### Phase 4: Roguelike Progression
-- [ ] Permadeath system
-- [ ] Upgrade menu
-- [ ] Run statistics tracking
-- [ ] Unlock system
+- [x] Permadeath system
+- [x] Upgrade menu
+- [x] Run statistics tracking
+- [x] Persistent upgrade progression
 
 #### Phase 5: Polish & Balance
 - [ ] SFX & Music
@@ -126,6 +109,11 @@ Procedural generation:
 - Terrain chunk generation
 - Enemy wave spawning
 - Loot distribution
+
+### `upgrade_manager.gd`
+Offers up to three upgrades after each run and saves selected upgrade levels in `user://progress.cfg`.
+
+The main scene includes a lightweight player, enemy spawner, HUD, and keyboard-selectable upgrade loop. Aim with the mouse and hold the left mouse button to fire.
 
 ## Performance Tips for Low-End Hardware
 

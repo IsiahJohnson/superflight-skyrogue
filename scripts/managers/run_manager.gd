@@ -35,7 +35,7 @@ func start_run():
 
 func add_score(points: int):
 	"""Add points to current run score"""
-	current_score += points
+	current_run_score += points
 
 func enemy_defeated(enemy_value: int = 10):
 	"""Called when player defeats an enemy"""

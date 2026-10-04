@@ -14,7 +14,10 @@ config/name="Superflight Sky Rogue"
 config/version="0.1.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2")
-config/icon="res://assets/icon.svg"
+
+[autoload]
+
+Constants="*res://scripts/utils/constants.gd"
 
 [display]
 
